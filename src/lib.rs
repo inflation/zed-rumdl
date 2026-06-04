@@ -26,6 +26,19 @@ impl Rumdl {
         language_server_id: &LanguageServerId,
         worktree: &Worktree,
     ) -> zed::Result<RumdlBinary> {
+        // A user-configured binary path takes precedence over PATH and downloads.
+        if let Some(path) = LspSettings::for_worktree(language_server_id.as_ref(), worktree)
+            .ok()
+            .and_then(|lsp_settings| lsp_settings.binary)
+            .and_then(|binary| binary.path)
+            .filter(|path| !path.is_empty())
+        {
+            return Ok(RumdlBinary {
+                path: PathBuf::from(path),
+                env: Some(worktree.shell_env()),
+            });
+        }
+
         if let Some(path) = worktree.which(NAME) {
             return Ok(RumdlBinary {
                 path: PathBuf::from(path),
