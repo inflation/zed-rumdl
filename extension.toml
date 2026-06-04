@@ -1,6 +1,6 @@
 id = "rumdl"
 name = "Rumdl Markdown Linter"
-version = "0.0.1"
+version = "0.0.2"
 schema_version = 1
 authors = ["Inflation <me@kosmopho.dev>"]
 description = "A high-performance Markdown linter, written in Rust"
